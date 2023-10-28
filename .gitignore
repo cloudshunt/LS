@@ -1,0 +1,3 @@
+#excludes any npm installed pacakges
+node_modules/
+
