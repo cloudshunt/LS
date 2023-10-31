@@ -1,0 +1,7 @@
+{
+  "greetMessage": "Welcome to Calculator!",
+  "notValidNumMessage": "not a valid number, try again",
+  "selectOperationMessage": "Select an operation.\n1) Add 2) Subtract 3) Multiply 4) Divide",
+  "invalidOperationSelectMessage": "Must choose 1,2,3 or 4",
+  "repeatProgramSelectionMessage": "Do another round of calculation? 1 = yes, 2 = no "
+}
