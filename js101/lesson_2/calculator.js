@@ -1,5 +1,6 @@
-const readline = require('readline-sync');
-const msgJson = require('./calculator_messages.json');
+const READLINE = require('readline-sync');
+const MSG = require('./calculator_messages.json');
+const LANGUAGE = 'en';
 
 
 function prompt(message) {
@@ -10,33 +11,37 @@ function invalidNumber(number) {
   return number.trimStart() === '' || Number.isNaN(Number(number));
 }
 
+function message(message, lang = LANGUAGE) {
+  return MSG[lang][message];
+}
+
 let continueProgram = true;
 
 while (continueProgram) {
-  prompt(msgJson.greetMessage); //json greet //done
+  prompt(message('greetMessage')); //json greet
 
-  prompt("What's the first number?");
-  let number1 = readline.question();
+  prompt(message('firstNumAsk')); //json firstNumAsk
+  let number1 = READLINE.question();
 
   while (invalidNumber(number1)) {
-    prompt(msgJson.notValidNumMessage); //json notValidNumMessage DONE
-    number1 = readline.question();
+    prompt(message('notValidNumMessage')); //json notValidNumMessage
+    number1 = READLINE.question();
   }
 
-  console.log('Second number?');
-  let number2 = readline.question();
+  console.log(message('secondNumAsk')); //json second num
+  let number2 = READLINE.question();
 
   while (invalidNumber(number2)) {
-    prompt(msgJson.notValidNumMessage); //json notValidNum DONE
-    number2 = readline.question();
+    prompt(message('notValidNumMessage')); //json notValidNum DONE
+    number2 = READLINE.question();
   }
 
-  console.log( msgJson.selectOperationMessage); //json selectOperation DONE
-  let operation = readline.question();
+  console.log( message('selectOperationMessage')); //json selectOperation DONE
+  let operation = READLINE.question();
 
   while (!['1','2','3','4'].includes(operation)) {
-    prompt(msgJson.invalidOperationSelectMessage); //json invalidOperationSelectMessage DONE
-    operation = readline.question();
+    prompt(message('invalidOperationSelectMessage')); //json invalidOperationSelectMessage DONE
+    operation = READLINE.question();
   }
 
   let output;
@@ -55,12 +60,12 @@ while (continueProgram) {
       break;
   }
 
-  console.log(`result is ${output}`);
+  console.log(message('resultMessage'),output); //json
 
 
   while (true) {
-    prompt(msgJson.repeatProgramSelectionMessage); //json repeatProgramSelection
-    let end = readline.question();
+    prompt(message('repeatProgramSelectionMessage')); //json repeatProgramSelection
+    let end = READLINE.question();
 
     if (end === '1') {
       continueProgram = true;
@@ -68,7 +73,7 @@ while (continueProgram) {
     } else if (end === '2') {
       continueProgram = false;
       break;
-    } else {console.log('invalid input, try again.') }
+    } else {console.log(message('invalidContinueProgramSelectionMessage')) } //json
   }
 }
 

@@ -1,7 +1,26 @@
 {
-  "greetMessage": "Welcome to Calculator!",
-  "notValidNumMessage": "not a valid number, try again",
-  "selectOperationMessage": "Select an operation.\n1) Add 2) Subtract 3) Multiply 4) Divide",
-  "invalidOperationSelectMessage": "Must choose 1,2,3 or 4",
-  "repeatProgramSelectionMessage": "Do another round of calculation? 1 = yes, 2 = no "
+  "en": {
+    "greetMessage": "Welcome to Calculator!",
+    "firstNumAsk": "What's the first number?",
+    "secondNumAsk": "What's the second number?",
+    "notValidNumMessage": "not a valid number, try again",
+    "selectOperationMessage": "Select an operation.\n1) Add 2) Subtract 3) Multiply 4) Divide",
+    "invalidOperationSelectMessage": "Must choose 1,2,3 or 4",
+    "resultMessage": "The result is:",
+    "repeatProgramSelectionMessage": "Do another round of calculation? 1 = yes, 2 = no ",
+    "invalidContinueProgramSelectionMessage": "invalid input, try again."
+  },
+
+  "ch":{
+    "greetMessage": "歡迎使用計算機！",
+    "firstNumAsk": "第一個數字是多少？",
+    "secondNumAsk": "第二個數字是多少？",
+    "notValidNumMessage": "不是有效的號碼，請重試",
+    "selectOperationMessage": "選擇一個運算。\n1) 加 2) 減 3) 乘 4) 除",
+    "invalidOperationSelectMessage": "必須選擇 1、2、3 或 4",
+    "resultMessage": "結果是：",
+    "repeatProgramSelectionMessage": "進行另一輪計算嗎？ 1 = 是，2 = 否",
+    "invalidContinueProgramSelectionMessage": "輸入無效，請重試。"
+  }
+
 }
