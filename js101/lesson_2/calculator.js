@@ -18,15 +18,26 @@ function invalidNumber(number) {
   return number.trimStart() === '' || Number.isNaN(Number(number));
 }
 
-prompt("Welcome to Calculator!");
+function inputNum() {
+  let num = readline.question();
 
-prompt("What's the first number?");
-let number1 = readline.question();
+  while (invalidNumber(num)) {
+    prompt("not a valid number, try again");
+    num = readline.question();
+  }
 
-while (invalidNumber(number1)) {
-  prompt("not a valid number, try again");
-  number1 = readline.question();
+  return num;
 }
+
+// prompt("Welcome to Calculator!");
+
+// prompt("What's the first number?");
+// let number1 = readline.question();
+
+// while (invalidNumber(number1)) {
+//   prompt("not a valid number, try again");
+//   number1 = readline.question();
+// }
 
 console.log('Second number?');
 let number2 = readline.question();
@@ -66,4 +77,12 @@ switch (operation) {
 
 console.log(`result is ${output}`);
 
-console.log('hi');
+prompt('continue or not? 1 = yes, 2 = no ');
+let end = readline().question;
+while (end) {
+  prompt("Welcome to Calculator!");
+
+  prompt("What's the first number?");
+  let number1 = inputNum();
+
+  console.log('Second number?');
