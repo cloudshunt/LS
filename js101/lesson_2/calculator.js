@@ -66,3 +66,4 @@ switch (operation) {
 
 console.log(`result is ${output}`);
 
+console.log('hi');
