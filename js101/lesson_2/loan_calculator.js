@@ -8,10 +8,10 @@ function invalidNumber(number) {
   return number.trimStart() === '' || Number.isNaN(Number(number)) || Number(number) < 0;
 }
 
-function invalidMonths(number) {
-  return invalidNumber(number) || //not a valid num OR
-  !(Number.isInteger(Number(number))) || //not an integer OR
-  Number(number) < 1; //less than 1 month
+function invalidMonths(numOfMonths) {
+  return invalidNumber(numOfMonths) || //not a valid num OR
+  !(Number.isInteger(Number(numOfMonths))) || //not an integer OR
+  Number(numOfMonths) < 1; //less than 1 month
 }
 
 function monthlyPaymentCalc(loanAmt, APR, months) {
@@ -34,6 +34,8 @@ function monthlyPaymentCalc(loanAmt, APR, months) {
 prompt('Welcome to loan calculator!');
 
 while (true) {
+  console.log("--------------------------------------");
+
   prompt('What is your loan amount?');
   let loanAmount = READLINE.question();
 
@@ -58,10 +60,10 @@ while (true) {
     APR = READLINE.question();
   }
 
-  console.log(`Check point:\n\
+  console.log(`\nCheck point:\n\
   Loan amount:$ ${loanAmount}\n\
   Loan duration: ${loanDurationMonths}\n\
-  APR: ${APR}%`);
+  APR: ${APR}%\n`);
 
   let monthlyPayment = monthlyPaymentCalc(loanAmount, APR, loanDurationMonths);
   prompt(`Your monthly payment is: $${monthlyPayment.toFixed(2)}`);
