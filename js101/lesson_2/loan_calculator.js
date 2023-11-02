@@ -1,4 +1,5 @@
 const READLINE = require('readline-sync');
+const CLEAR = require('clear');
 
 function prompt(message) {
   console.log(`=> ${message}`);
@@ -14,15 +15,19 @@ function invalidMonths(numOfMonths) {
   Number(numOfMonths) < 1; //less than 1 month
 }
 
+function monthlyInterestCalc(APR) {
+  //Ex: APR is 15%, need to divide by 100 to make it 0.15 to allow for further
+  //calculation
+  return (Number(APR) / 100) / 12;
+}
+
 function monthlyPaymentCalc(loanAmt, APR, months) {
   //deal with 0 interest loans
   if (APR === '0') {
     return Number(loanAmt) / Number(months);
   }
 
-  //Ex: APR is 15%, need to divide by 100 to make it 0.15 to allow for further
-  //calculation
-  let monthlyInterest = (Number(APR) / 100) / 12;
+  let monthlyInterest = monthlyInterestCalc(APR);
 
   let monthlyPmt = Number(loanAmt) *
                   (monthlyInterest /
@@ -40,7 +45,7 @@ while (true) {
   let loanAmount = READLINE.question();
 
   while (invalidNumber(loanAmount)) {
-    prompt('Invlid entry, loan amount must be postive number');
+    prompt('Invalid entry, loan amount must be postive number');
     loanAmount = READLINE.question();
   }
 
@@ -78,6 +83,7 @@ while (true) {
   if (anotherRound === '0') {
     break;
   } else if (anotherRound === '1') {
+    CLEAR();
     continue;
   }
 
