@@ -39,7 +39,7 @@ function monthlyPaymentCalc(loanAmt, APR, months) {
 prompt('Welcome to loan calculator!');
 
 while (true) {
-  console.log("--------------------------------------");
+  console.log("-----------------PROGRAM STARTS------------------");
 
   prompt('What is your loan amount?');
   let loanAmount = READLINE.question();
