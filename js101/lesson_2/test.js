@@ -1,16 +1,10 @@
-function foo1(a) {
-  return 2 * a;
+function greeter() {
+  return greeting => console.log(greeting);
 }
 
-let foo2 = function(a) {
-  return 2 * a;
-};
+greeter("hello");
 
-const foo3 = a => 2 * a;
 
-// create a random integer between 0 and 9
-let randomNumber = Math.floor(10 * Math.random());
-
-console.log(foo1(randomNumber));
-console.log(foo2(randomNumber));
-console.log(foo3(randomNumber));
+// let greeting = 5;
+// let hi = greeting => console.log(greeting);
+// hi(greeting);
