@@ -1,3 +1,4 @@
+const CLEAR = require('clear');
 const READLINE = require('readline-sync');
 const VALID_CHOICES = ['rock','paper','scissors', 'lizard', 'spock'];
 const VALID_CHOICES_ABBREVIATIONS = ['r','p','sc','l','sp'];
@@ -9,6 +10,28 @@ const WINNING_COMBOS = {
   lizard:   ['paper',    'spock', 'p', 'sp'],    l: ['paper',    'spock', 'p', 'sp'],
   spock:    ['rock',     'scissors', 'r', 'sc'], sp:['rock',     'scissors', 'r', 'sc'],
 };
+const GRAND_WIN_SCORE = 3;
+let playerScore = 0;
+let computerScore = 0;
+
+function grandWinnerAnnounce() {
+  if (playerScore === 3) {
+    prompt('Player is the grand winner!!');
+  } else if (computerScore === 3) {
+    prompt('Computer is the grand winner!!');
+  }
+  console.log('-----------------------------');
+}
+
+function resetScores() {
+  playerScore = 0;
+  computerScore = 0;
+}
+
+function displayScore() {
+  prompt('Current Scores are:');
+  console.log(`Player: ${playerScore}\nComputer: ${computerScore}`);
+}
 
 function selectionMessage(choices, abbreviationChoices) {
   let resultMessage = '';
@@ -16,7 +39,7 @@ function selectionMessage(choices, abbreviationChoices) {
   for (let idx = 0; idx < choices.length; idx += 1) {
     resultMessage += `${choices[idx]} = ${abbreviationChoices[idx]}, `;
   }
-  //rid of the extra comma and space and the end of message
+  //rid of the extra comma and space ay the end of message
   resultMessage = resultMessage.slice(0, resultMessage.length - 2);
 
   return resultMessage;
@@ -27,12 +50,15 @@ function gameWinCheck (choice, otherChoice) {
   return WINNING_COMBOS[choice].includes(otherChoice);
 }
 
-function displayWinner(playerChoice, computerChoice) {
-  prompt(`You chose ${playerChoice}, computer chose ${computerChoice}`);
+function scoreIncrement(playerWin, computerWin) {
+  if (playerWin) {
+    playerScore += 1;
+  } else if (computerWin) {
+    computerScore += 1;
+  }
+}
 
-  let playerWin = gameWinCheck(playerChoice, computerChoice);
-  let computerWin = gameWinCheck(computerChoice, playerChoice);
-
+function displayWinner(playerWin, computerWin) {
   if (playerWin) {
     prompt('You win!');
   } else if (computerWin) {
@@ -60,7 +86,19 @@ while (true) {
   let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
   let computerChoice = VALID_CHOICES[randomIndex];
 
-  displayWinner(playerChoice, computerChoice);
+  let playerWin = gameWinCheck(playerChoice, computerChoice);
+  let computerWin = gameWinCheck(computerChoice, playerChoice);
+
+  prompt(`You chose ${playerChoice}, computer chose ${computerChoice}`);
+  displayWinner(playerWin, computerWin);
+  scoreIncrement(playerWin, computerWin);
+  displayScore();
+
+  if (playerScore === GRAND_WIN_SCORE || computerScore === GRAND_WIN_SCORE) {
+    grandWinnerAnnounce();
+    resetScores();
+  }
+
 
   prompt('Do you want to play again (y/n)?');
   let answer = READLINE.question().toLowerCase();
@@ -70,6 +108,5 @@ while (true) {
   }
 
   if (answer[0] !== 'y') break;
+  CLEAR();
 }
-
-
