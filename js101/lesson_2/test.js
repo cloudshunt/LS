@@ -1,10 +1,11 @@
-function greeter() {
-  return greeting => console.log(greeting);
+const READLINE = require('readline-sync');
+function prompt(message) {
+  console.log(`=> ${message}`);
 }
 
-greeter("hello");
-
-
-// let greeting = 5;
-// let hi = greeting => console.log(greeting);
-// hi(greeting);
+prompt('Do you want to play again (y/n)?');
+let answer = READLINE.question().toLowerCase();
+while (answer !== 'n' && answer !== 'no' && answer !== 'y' && answer !== 'yes') {
+  prompt('Please enter "y" or "n".');
+  answer = READLINE.question().toLowerCase();
+}

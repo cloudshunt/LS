@@ -15,7 +15,7 @@ let playerScore = 0;
 let computerScore = 0;
 
 function grandWinnerAnnounce() {
-  if (playerScore === 3) {
+  if (playerScore === GRAND_WIN_SCORE) {
     prompt('Player is the grand winner!!');
   } else if (computerScore === 3) {
     prompt('Computer is the grand winner!!');
@@ -72,10 +72,14 @@ function prompt(message) {
   console.log(`=> ${message}`);
 }
 
+function displayWelcomeMessage() {
+  prompt("Welcome to the game of rock, paper, scissors, lizard and spock.");
+}
 
+displayWelcomeMessage();
 while (true) {
   prompt(`Choose one: ${MESSAGE}`);
-  let playerChoice = READLINE.question();
+  let playerChoice = READLINE.question().toLowerCase();
 
   while (!VALID_CHOICES.includes(playerChoice) &&
          !VALID_CHOICES_ABBREVIATIONS.includes(playerChoice)) {
@@ -102,11 +106,10 @@ while (true) {
 
   prompt('Do you want to play again (y/n)?');
   let answer = READLINE.question().toLowerCase();
-  while (answer[0] !== 'n' && answer[0] !== 'y') {
+  while (answer !== 'n' && answer !== 'no' && answer !== 'y' && answer !== 'yes') {
     prompt('Please enter "y" or "n".');
     answer = READLINE.question().toLowerCase();
   }
-
   if (answer[0] !== 'y') break;
   CLEAR();
 }
