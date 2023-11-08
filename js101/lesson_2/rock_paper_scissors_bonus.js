@@ -1,8 +1,14 @@
 const CLEAR = require('clear');
 const READLINE = require('readline-sync');
-const VALID_CHOICES = ['rock','paper','scissors', 'lizard', 'spock'];
-const VALID_CHOICES_ABBREVIATIONS = ['r','p','sc','l','sp'];
-const MESSAGE = selectionMessage(VALID_CHOICES, VALID_CHOICES_ABBREVIATIONS);
+const VALID_CHOICES = {
+  rock: 'r',
+  paper: 'p',
+  scissors: 'sc',
+  spock: 'sp'
+};
+const CHOICES_ABBREVIATION_ARR = Object.values(VALID_CHOICES);
+
+const MESSAGE = selectionMessage(VALID_CHOICES);
 const WINNING_COMBOS = {
   rock:     ['scissors', 'lizard', 'sc', 'l'],   r: ['scissors', 'lizard', 'sc', 'l'],
   paper:    ['rock',     'spock', 'r', 'sp'],    p: ['rock',     'spock', 'r', 'sp'],
@@ -33,12 +39,12 @@ function displayScore() {
   console.log(`Player: ${playerScore}\nComputer: ${computerScore}`);
 }
 
-function selectionMessage(choices, abbreviationChoices) {
-  let resultMessage = '';
-
-  for (let idx = 0; idx < choices.length; idx += 1) {
-    resultMessage += `${choices[idx]} = ${abbreviationChoices[idx]}, `;
+function selectionMessage(validChoices) {
+  let resultMessage = ``;
+  for (const key in validChoices) {
+    resultMessage += `${key} = ${validChoices[key]}, `;
   }
+
   //rid of the extra comma and space ay the end of message
   resultMessage = resultMessage.slice(0, resultMessage.length - 2);
 
@@ -76,19 +82,38 @@ function displayWelcomeMessage() {
   prompt("Welcome to the game of rock, paper, scissors, lizard and spock.");
 }
 
-displayWelcomeMessage();
-while (true) {
-  prompt(`Choose one: ${MESSAGE}`);
+function computerChoiceSelection() {
+  let randomIndex = Math.floor(Math.random() * CHOICES_ABBREVIATION_ARR.length);
+  let computerChoice = CHOICES_ABBREVIATION_ARR[randomIndex];
+  return computerChoice;
+}
+
+function playerChoiceSelection() {
   let playerChoice = READLINE.question().toLowerCase();
 
-  while (!VALID_CHOICES.includes(playerChoice) &&
-         !VALID_CHOICES_ABBREVIATIONS.includes(playerChoice)) {
+  while (!(playerChoice in VALID_CHOICES) &&
+         !CHOICES_ABBREVIATION_ARR.includes(playerChoice)) {
     prompt("That's not a valid choice");
     playerChoice = READLINE.question();
   }
 
-  let randomIndex = Math.floor(Math.random() * VALID_CHOICES.length);
-  let computerChoice = VALID_CHOICES[randomIndex];
+  return playerChoice;
+}
+
+function playAgainSelection() {
+  let answer = READLINE.question().toLowerCase();
+  while (answer !== 'n' && answer !== 'no' && answer !== 'y' && answer !== 'yes') {
+    prompt('Please enter "y" or "n".');
+    answer = READLINE.question().toLowerCase();
+  }
+  return answer;
+}
+
+displayWelcomeMessage();
+while (true) {
+  prompt(`Choose one: ${MESSAGE}`);
+  let playerChoice = playerChoiceSelection();
+  let computerChoice = computerChoiceSelection();
 
   let playerWin = gameWinCheck(playerChoice, computerChoice);
   let computerWin = gameWinCheck(computerChoice, playerChoice);
@@ -105,11 +130,7 @@ while (true) {
 
 
   prompt('Do you want to play again (y/n)?');
-  let answer = READLINE.question().toLowerCase();
-  while (answer !== 'n' && answer !== 'no' && answer !== 'y' && answer !== 'yes') {
-    prompt('Please enter "y" or "n".');
-    answer = READLINE.question().toLowerCase();
-  }
+  let answer = playAgainSelection();
   if (answer[0] !== 'y') break;
   CLEAR();
 }
