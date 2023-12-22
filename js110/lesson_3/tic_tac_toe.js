@@ -3,6 +3,12 @@ const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
 const GRAND_WINNER_WIN_ROUND_REQ = 2; //score track
+const MID_SQUARE = 'b2';
+const WINNING_LINES = [
+  ['a1','a2','a3'], ['b1','b2','b3'], ['c1','c2','c3'], // rows
+  ['a1','b1','c1'], ['a2','b2','c2'], ['a3','b3','c3'], // columns
+  ['a1','b2','c3'], ['a3','b2','c1']             // diagonals
+];
 
 let welcomeMessage = () => prompt('Welcome to Tic-Tac-Toe:');
 
@@ -67,66 +73,78 @@ function playerChoice(board) {
 
 }
 
+function findAtRiskSquare(line, board, marker) {
+  let markerLine = line.map(square => board[square]);
+
+  if (markerLine.filter(val => val === marker).length === 2) {
+    let unusedSquare = line.find(square => board[square] === INITIAL_MARKER);
+    if (unusedSquare !== undefined) return unusedSquare;
+  }
+
+  return null;
+
+}
+
 function computerDefensiveChoice(board) {
-  let winningComboHuman = winningComboHumanFunc(board);
-  //if (winningComboHuman)
+  let riskSquare = null;
+  for (let idx = 0; idx < WINNING_LINES.length; idx += 1) {
+    let line = WINNING_LINES[idx];
+    riskSquare = findAtRiskSquare(line, board, HUMAN_MARKER);
+    if (riskSquare) return riskSquare;
+  }
+
+  return riskSquare;
 }
 
 function computerRandomChoice(board) {
-  return Math.floor(Math.random() * emptySquares(board).length);
+  let randomIdx = Math.floor(Math.random() * emptySquares(board).length);
+  return emptySquares(board)[randomIdx];
+}
+
+function computerOffensiveChoice(board) {
+  let riskSquare = null;
+  for (let idx = 0; idx < WINNING_LINES.length; idx += 1) {
+    let line = WINNING_LINES[idx];
+    riskSquare = findAtRiskSquare(line, board, COMPUTER_MARKER);
+    if (riskSquare) return riskSquare;
+  }
+
+  return riskSquare;
 }
 
 function computerChoice(board) {
-  let randomIdx = computerRandomChoice(board);
-  //let defensiveIdx = computerDefensiveChoice(board);
-  let square = emptySquares(board)[randomIdx];
-  board[square] = COMPUTER_MARKER;
+  let randomSquare = computerRandomChoice(board);
+  let offensiveSquare = computerOffensiveChoice(board);
+  let defensiveSquare = computerDefensiveChoice(board);
+  let midSquare = board[MID_SQUARE];
+
+  if (offensiveSquare) board[offensiveSquare] = COMPUTER_MARKER;
+  else if (defensiveSquare) board[defensiveSquare] = COMPUTER_MARKER;
+  else if (midSquare === INITIAL_MARKER) board[MID_SQUARE] = COMPUTER_MARKER;
+  else board[randomSquare] = COMPUTER_MARKER;
 }
 
 function boardFull(board) {
   return emptySquares(board).length === 0;
 }
 
-function winningComboHumanFunc(board) {
-  let winningComboHuman = [
-    (board['a1'] === HUMAN_MARKER && board['a2'] === HUMAN_MARKER && board['a3'] === HUMAN_MARKER),
-    (board['b1'] === HUMAN_MARKER && board['b2'] === HUMAN_MARKER && board['b3'] === HUMAN_MARKER),
-    (board['c1'] === HUMAN_MARKER && board['c2'] === HUMAN_MARKER && board['c3'] === HUMAN_MARKER),
-    (board['a1'] === HUMAN_MARKER && board['b1'] === HUMAN_MARKER && board['c1'] === HUMAN_MARKER),
-    (board['a2'] === HUMAN_MARKER && board['b2'] === HUMAN_MARKER && board['c2'] === HUMAN_MARKER),
-    (board['a3'] === HUMAN_MARKER && board['b3'] === HUMAN_MARKER && board['c3'] === HUMAN_MARKER),
-    (board['a1'] === HUMAN_MARKER && board['b2'] === HUMAN_MARKER && board['c3'] === HUMAN_MARKER),
-    (board['a3'] === HUMAN_MARKER && board['b2'] === HUMAN_MARKER && board['c1'] === HUMAN_MARKER)
-  ];
-  return winningComboHuman;
-}
-
-function winningComboPCFunc(board) {
-  let winningComboPC = [
-    (board['a1'] === COMPUTER_MARKER && board['a2'] === COMPUTER_MARKER && board['a3'] === COMPUTER_MARKER),
-    (board['b1'] === COMPUTER_MARKER && board['b2'] === COMPUTER_MARKER && board['b3'] === COMPUTER_MARKER),
-    (board['c1'] === COMPUTER_MARKER && board['c2'] === COMPUTER_MARKER && board['c3'] === COMPUTER_MARKER),
-    (board['a1'] === COMPUTER_MARKER && board['b1'] === COMPUTER_MARKER && board['c1'] === COMPUTER_MARKER),
-    (board['a2'] === COMPUTER_MARKER && board['b2'] === COMPUTER_MARKER && board['c2'] === COMPUTER_MARKER),
-    (board['a3'] === COMPUTER_MARKER && board['b3'] === COMPUTER_MARKER && board['c3'] === COMPUTER_MARKER),
-    (board['a1'] === COMPUTER_MARKER && board['b2'] === COMPUTER_MARKER && board['c3'] === COMPUTER_MARKER),
-    (board['a3'] === COMPUTER_MARKER && board['b2'] === COMPUTER_MARKER && board['c1'] === COMPUTER_MARKER)
-  ];
-  return winningComboPC;
-}
-
 function detectWinner(board) {
-  let winningComboPC = winningComboPCFunc(board);
-  let winningComboHuman = winningComboHumanFunc(board);
+  for (let line = 0; line < WINNING_LINES.length; line += 1) {
+    let [sq1,sq2,sq3] = WINNING_LINES[line];
 
-  /** Win conditions
-   * a1 a2 a3, b1 b2 b3, c1 c2 c3 //rows
-   * a1 b1 c1, a2 b2 c2, a3 b3 c3 // columns
-   * a1 b2 c3, a3 b2 c1 //diagonals
-   */
-  if (winningComboHuman.includes(true)) return "human";
-  else if (winningComboPC.includes(true)) return "computer";
-  else return false;
+    if (
+      board[sq1] === HUMAN_MARKER &&
+      board[sq2] === HUMAN_MARKER &&
+      board[sq3] === HUMAN_MARKER
+    ) return "human";
+    else if (
+      board[sq1] === COMPUTER_MARKER &&
+      board[sq2] === COMPUTER_MARKER &&
+      board[sq3] === COMPUTER_MARKER
+    ) return 'computer';
+  }
+
+  return false;
 }
 
 function endGameCheckAndMessage(board) {
@@ -144,25 +162,32 @@ function endGameCheckAndMessage(board) {
   return false;
 }
 
-function turnsLogic(board, humanWin, computerWin) {
+// eslint-disable-next-line max-lines-per-function, max-statements
+function turnsLogic(board, humanWin, computerWin, whoFirst) {
   let endGame;
 
-  while (true) {
-    playerChoice(board);
-    displayBoard(board);
-    endGame = endGameCheckAndMessage(board);
-    if (endGame) {
-      humanWin += 1;
-      break;
-    }
 
-    computerChoice(board);
-    displayBoard(board);
-    endGame = endGameCheckAndMessage(board);
-    if (endGame) {
-      computerWin += 1;
-      break;
+  let whoGoesNext = (whoFirst === 'human') ? 1 : 2;
+  console.log(`${whoGoesNext} is next`);
+  while (true) {
+    if (whoGoesNext % 2 === 1) {
+      playerChoice(board);
+      displayBoard(board);
+      endGame = endGameCheckAndMessage(board);
+      if (endGame) {
+        humanWin += 1;
+        break;
+      }
+    } else if (whoGoesNext % 2 === 0) {
+      computerChoice(board);
+      displayBoard(board);
+      endGame = endGameCheckAndMessage(board);
+      if (endGame) {
+        computerWin += 1;
+        break;
+      }
     }
+    whoGoesNext += 1;
   }
 
   return [humanWin, computerWin];
@@ -172,11 +197,12 @@ function startMenu() {
   welcomeMessage();
 
   while (true) {
-    prompt('Press enter to start, enter anything else + enter to exit:');
-    let enter = READLINE.question();
-    if (enter === '') return true;
+    prompt('Select:\n1 to start with your turn.\n2 to start with Computer.');
+    let input = READLINE.question();
+    if (input === '1') return 'human';
+    else if (input === '2') return 'computer';
     else {
-      return false;
+      prompt('inbalid input, try again');
     }
   }
 }
@@ -211,23 +237,25 @@ function grandWinnerCheck(yourWin, computerWin) {
   } else return [yourWin, computerWin, false];
 }
 
-function roundOfGame(humanWin, computerWin) {
+function roundOfGame(humanWin, computerWin, whoFirst) {
   let board = initializeBoard();
   displayBoard(board);
 
-  [humanWin, computerWin] = turnsLogic(board, humanWin, computerWin);
+  [humanWin, computerWin] = turnsLogic(board, humanWin, computerWin, whoFirst);
 
   return [humanWin, computerWin];
 }
 
 function startGame() {
-  let continueGame =  startMenu();
+  let whoFirst =  startMenu();
+  //console.log(`${whoFirst} goes first`);
+  let continueGame = true;
   let grandWin;
 
   let [yourWin, computerWin] = initializeWinCount();
 
   while (continueGame) {
-    [yourWin, computerWin] = roundOfGame(yourWin, computerWin);
+    [yourWin, computerWin] = roundOfGame(yourWin, computerWin, whoFirst);
     [yourWin, computerWin, grandWin] = grandWinnerCheck(yourWin, computerWin);
     if (grandWin === true) {
       prompt('Thank you for playing the grand game, Good Bye!!!');
