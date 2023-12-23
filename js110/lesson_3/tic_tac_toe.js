@@ -2,7 +2,7 @@ const READLINE = require('readline-sync');
 const INITIAL_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
-const GRAND_WINNER_WIN_ROUND_REQ = 2; //score track
+const GRAND_WINNER_WIN_ROUND_REQ = 5; //score track
 const MID_SQUARE = 'b2';
 const WINNING_LINES = [
   ['a1','a2','a3'], ['b1','b2','b3'], ['c1','c2','c3'], // rows
@@ -162,25 +162,31 @@ function endGameCheckAndMessage(board) {
   return false;
 }
 
+function humanTurnLogic(board) {
+  playerChoice(board);
+  displayBoard(board);
+}
+
+function computerTurnLogic(board) {
+  computerChoice(board);
+  displayBoard(board);
+}
+
 // eslint-disable-next-line max-lines-per-function, max-statements
 function turnsLogic(board, humanWin, computerWin, whoFirst) {
   let endGame;
 
-
   let whoGoesNext = (whoFirst === 'human') ? 1 : 2;
-  console.log(`${whoGoesNext} is next`);
   while (true) {
     if (whoGoesNext % 2 === 1) {
-      playerChoice(board);
-      displayBoard(board);
+      humanTurnLogic(board);
       endGame = endGameCheckAndMessage(board);
       if (endGame) {
         humanWin += 1;
         break;
       }
     } else if (whoGoesNext % 2 === 0) {
-      computerChoice(board);
-      displayBoard(board);
+      computerTurnLogic(board);
       endGame = endGameCheckAndMessage(board);
       if (endGame) {
         computerWin += 1;
@@ -227,7 +233,12 @@ function initializeWinCount() {
   return [0,0];
 }
 
+function scoreDisplay(yourWin, computerWin) {
+  prompt(`Your Score:${yourWin} // Computer Score:${computerWin}`);
+}
+
 function grandWinnerCheck(yourWin, computerWin) {
+  scoreDisplay(yourWin, computerWin);
   if (yourWin === GRAND_WINNER_WIN_ROUND_REQ) {
     prompt('You are the Grand Winner!!');
     return [...initializeWinCount(), true];
