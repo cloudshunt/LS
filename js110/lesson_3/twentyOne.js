@@ -94,15 +94,63 @@ function initializeCard(id, cardSuit, cardValue) {
   return cardObj;
 }
 
-function initializePlayersHand() {
-  let players = {
-    human:{hands:[], points:0},
-    computer:{hands:[], points:0}
-  }
+function initializeHand() {
+  let handTracker = {
+    player:{hand:[], points:0},
+    dealer:{hand:[], points:0}
+  };
+  return handTracker;
 }
 
+/**
+ * card is either delt to player or dealer, every deal gives one card
+ */
+
+
+
+function updateHand(who, cardToAdd, handTracker) {
+  handTracker[who]['hand'].push(cardToAdd);
+
+  let cardID = Object.keys(cardToAdd).join(); //to get card id as stand alone string
+  handTracker[who]['points'] += cardToAdd[cardID].points;
+
+  return handTracker;
+
+}
+
+function dealCard(who, deck, handTracker) {
+  let card = deck.shift();
+  return updateHand(who, card, handTracker);
+}
+
+function initialDeal(deck, handTracker) {
+  handTracker = dealCard("player", deck, handTracker);
+  handTracker = dealCard("dealer", deck, handTracker);
+
+  handTracker = dealCard("player", deck, handTracker);
+  handTracker = dealCard("dealer", deck, handTracker);
+
+  return handTracker;
+}
+
+function prompt(message) {
+  console.log(`=>${message}`);
+}
+function displayHands(handTracker) {
+  console.log(handTracker.dealer);
+  //let dealerValue = handTracker.dealer;
+  //prompt(`Dealer has: ${dealerValue} and unknown card`); //unknown card will be idx 0
+  prompt(`You have:`);
+}
 function startGame() {
   let deck = initializeDeck();
+  let handTracker = initializeHand();
+  handTracker = initialDeal(deck, handTracker);
+
+  displayHands(handTracker);
+
+
+  //console.log();
 
 }
 
