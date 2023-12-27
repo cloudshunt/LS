@@ -63,6 +63,7 @@ function calcTotal(who, handTracker) {
       if (sum > WINNING_POINTS) sum -= 10;
     });
 
+  // update totalPoints for respective entity (dealer or player)
   handTracker[who].total = sum;
   return sum;
 }
@@ -95,12 +96,14 @@ function joinAnd(arr, delimeter = ', ', lastDelimeter = 'and') {
 
 // eslint-disable-next-line consistent-return
 function handDisplayLoop(someonesHand, who, endCondition = false) {
+
   let someonesHandValueArr = someonesHand.map((card) => {
     return card.value;
   });
 
-  // Omit the 0th idx for display, as it stays unkown to the player till
-  // dealer's turn occurs
+  // show 0th idx of dealers card as unknown.
+  // Only display the unknown card when game ending condition occurs
+  // such as someone busts or someone wins
   if (who === 'dealer') {
     let unknownCard = someonesHandValueArr.shift();
     if (endCondition === false) {
@@ -118,9 +121,9 @@ function handDisplayLoop(someonesHand, who, endCondition = false) {
 }
 
 function displayHands(handTracker, endCondition) {
-  let yourSum = handTracker['player'].total;//calcTotal('player', handTracker);
+  let yourSum = handTracker['player'].total;
   let dealerHand = handTracker.dealer.hand;
-  prompt(`Dealer has: ${handDisplayLoop(dealerHand, "dealer", endCondition)}`);//unknown card will be idx 0
+  prompt(`Dealer has: ${handDisplayLoop(dealerHand, "dealer", endCondition)}`);
 
   let yourHand = handTracker.player.hand;
   prompt(`You have: ${handDisplayLoop(yourHand, "player", endCondition)} (${yourSum})\n`);
@@ -136,8 +139,7 @@ function dealCard(who, deck, handTracker) {
   handTracker[who]['hand'].push(card);
 
   let sum = calcTotal(who,handTracker);
-  handTracker[who].total = sum;
-  //return sum;
+  handTracker[who].total = sum; //update totalPoints of either player/dealer
 }
 
 function dealingLogic(who, deck, handTracker, endCondition = false) {

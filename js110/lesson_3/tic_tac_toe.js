@@ -10,6 +10,11 @@ const WINNING_LINES = [
   ['a1','b2','c3'], ['a3','b2','c1']             // diagonals
 ];
 
+let invalidMessage = () => {
+  console.clear();
+  prompt('invalid input, try again');
+};
+
 let welcomeMessage = () => prompt('Welcome to Tic-Tac-Toe:');
 
 function prompt(text) {
@@ -26,20 +31,20 @@ function initializeBoard() {
   return board;
 }
 
-function displayBoard(b) {
+function displayBoard(board) {
   console.clear();
 
   console.log('');
   console.log('     |     |');
-  console.log(`  ${b["a1"]}  |  ${b["a2"]}  |  ${b["a3"]}`);
+  console.log(`  ${board["a1"]}  |  ${board["a2"]}  |  ${board["a3"]}`);
   console.log('     |     |');
   console.log('-----+-----+-----');
   console.log('     |     |');
-  console.log(`  ${b["b1"]}  |  ${b["b2"]}  |  ${b["b3"]}`);
+  console.log(`  ${board["b1"]}  |  ${board["b2"]}  |  ${board["b3"]}`);
   console.log('     |     |');
   console.log('-----+-----+-----');
   console.log('     |     |');
-  console.log(`  ${b["c1"]}  |  ${b["c2"]}  |  ${b["c3"]}`);
+  console.log(`  ${board["c1"]}  |  ${board["c2"]}  |  ${board["c3"]}`);
   console.log('     |     |');
   console.log('');
 
@@ -65,7 +70,9 @@ function playerChoice(board) {
     square = READLINE.question().trim();
 
     if (emptySquares(board).includes(square)) break;
-    else prompt("Invalid choice, try again.\n");
+    else {
+      invalidMessage();
+    }
 
   }
 
@@ -150,7 +157,7 @@ function detectWinner(board) {
 function endGameCheckAndMessage(board) {
   if (boardFull(board)) {
     prompt("It's a tie...");
-    return true;
+    return false;
   } else if (detectWinner(board)  === 'human') {
     prompt('You Won!!');
     return true;
@@ -191,6 +198,8 @@ function turnsLogic(board, humanWin, computerWin, whoFirst) {
       if (endGame) {
         computerWin += 1;
         break;
+      } else if (boardFull(board)) { //this is a tie
+        break;
       }
     }
     whoGoesNext += 1;
@@ -208,7 +217,7 @@ function startMenu() {
     if (input === '1') return 'human';
     else if (input === '2') return 'computer';
     else {
-      prompt('inbalid input, try again');
+      invalidMessage();
     }
   }
 }
@@ -224,7 +233,7 @@ function anotherRoundCheck() {
       prompt('Thank you for playing, goodbye!');
       return false;
     } else {
-      prompt('Invalid option, try again');
+      invalidMessage();
     }
   }
 }
@@ -259,7 +268,6 @@ function roundOfGame(humanWin, computerWin, whoFirst) {
 
 function startGame() {
   let whoFirst =  startMenu();
-  //console.log(`${whoFirst} goes first`);
   let continueGame = true;
   let grandWin;
 
