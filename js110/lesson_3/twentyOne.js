@@ -5,6 +5,10 @@ const VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace'];
 const WINNING_POINTS = 21;
 const DEALER_AIM_POINTS = 17;
 
+function invalidMessage() {
+  prompt('Invalid entry, try again!');
+}
+
 function shuffle(deck) {
   for (let index = deck.length - 1; index > 0; index--) {
     let otherIndex = Math.floor(Math.random() * (index + 1)); // 0 to index
@@ -162,7 +166,7 @@ function playerPrompt(who, deck, handTracker) {
       prompt(`You Hold`);
       break;
     } else {
-      prompt('Invalid entry, try again!');
+      invalidMessage();
     }
 
     if (bust) break;
@@ -288,7 +292,7 @@ function startGame() {
         prompt('Thank you for playing, goodbye!');
         continueGame = false;
         break;
-      } else prompt(`invalid input, try again`);
+      } else invalidMessage();
     }
   }
 
