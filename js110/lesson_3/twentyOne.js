@@ -295,8 +295,4 @@ function startGame() {
 
 }
 
-function runProgram() {
-  startGame();
-}
-
-runProgram();
+startGame();
