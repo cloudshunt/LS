@@ -1,37 +1,34 @@
-const READLINE = require('readline-sync');
-const VALID_CHOICES = {
-  rock: 'r',
-  paper: 'p',
-  scissors: 'sc',
-  spock: 'sp'
-};
+let x = [[8, 13, 27], ['apple', 'banana', 'cantaloupe']].map(arr => {
+  return arr.filter(item => {
+    if (typeof item === 'number') {    // if it's a number
+      return item > 13;
+    } else {
+      return item.length < 6;
+    }
+  });
+});
 
-// const VALID_CHOICES = ['rock','paper','scissors', 'lizard', 'spock'];
-// const VALID_CHOICES_ABBREVIATIONS = ['r','p','sc','l','sp'];
-const MESSAGE = selectionMessage(VALID_CHOICES);
-function prompt(message) {
-  console.log(`=> ${message}`);
+let mixArr = [[8, 13, 27], ['apple', 'banana', 'cantaloupe']];
+
+function func(arr) {
+  // ---- if my outer callback is filter---
+  //return [27] >>> outter function which will evaluate value true, 
+  // so will return all [8,13,27]
+  //return ['apple'] >>> outer function will evaluate true, 
+  // so will return entire array
+  // --- if my outer callback is map---
+  // will recieve the filtered [27] and the transformed array
+  // same as the next iterated array
+  return arr.filter(item => {
+    console.log(item);
+    if (typeof item === 'number') {    // if it's a number
+      return item > 13;
+    } else {
+      return item.length < 6;
+    }
+  });
 }
+let y = mixArr.map(func);
+console.log(y[0],y[1]);
 
-function selectionMessage(validChoices) { //DONE
-  let resultMessage = ``;
-  for (const key in validChoices) {
-    resultMessage += `${key} = ${validChoices[key]}, `;
-  }
 
-  //rid of the extra comma and space ay the end of message
-  resultMessage = resultMessage.slice(0, resultMessage.length - 2);
-
-  return resultMessage;
-}
-
-prompt(`Choose one: ${MESSAGE}`); //DONE
-let playerChoice = READLINE.question().toLowerCase();
-
-let choicesAbbreviationsArr = Object.values(VALID_CHOICES);
-
-while (!(playerChoice in VALID_CHOICES) &&
-       !choicesAbbreviationsArr.includes(playerChoice)) {
-  prompt("That's not a valid choice");
-  playerChoice = READLINE.question();
-}
