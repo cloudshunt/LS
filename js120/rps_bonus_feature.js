@@ -133,7 +133,7 @@ function createComputer() {
   let computerObject = {
     choose() {
       // This Checks the statistic, use to debug
-      console.log(this.stats); //NOTE: this show the stats before current move
+      //console.log(this.stats); //NOTE: this show the stats before current move
 
       this.move = this.weightedRandomSelection();
       this.moveHistory.push(this.move); // update history
@@ -284,10 +284,10 @@ const RPSGame = {
   play() {
     this.displayWelcome();
     while (true) {
-      this.human.choose();
-      console.log(`Human move history: ${this.human.getHistory()}`);
       this.computer.choose();
+      this.human.choose();
       console.log(`Computer move history: ${this.computer.getHistory()}`);
+      console.log(`Human move history: ${this.human.getHistory()}`);
       this.checkAndDisplayRoundWinner();
       this.checkDisplayUpdateGrandWinner();
       if ( this.grandWinner ) break; //If found grand winner, terminate game

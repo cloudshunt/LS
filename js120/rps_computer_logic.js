@@ -85,10 +85,10 @@ function updateUsagePercentage(stats) {
 
 //  */
 
-// function moveWinStatsUpdate(moveName, stats) {
-//   stats[moveName].points += 1;
-//   updateUsagePercentage(stats);
-// }
+function moveWinStatsUpdate(moveName, stats) {
+  stats[moveName].points += 1;
+  updateUsagePercentage(stats);
+}
 
 
 // function moveLoseStatsUpdate(losingMove, stats) {
@@ -113,21 +113,21 @@ function updateUsagePercentage(stats) {
 // moveLoseStatsUpdate(losingMove, stats);
 
 
-// function weightedRandomSelection(stats) {
-//   const totalWeight = Object.values(stats).reduce(
-//     (acc, move) => acc + move.usageOdds, 0
-//   );
+function weightedRandomSelection(stats) {
+  const totalWeight = Object.values(stats).reduce(
+    (acc, move) => acc + move.usageOdds, 0
+  );
 
-//   let randomNum = Math.random() * totalWeight;
+  let randomNum = Math.random() * totalWeight;
 
-//   for (let moveName in stats) {
-//     const move = stats[moveName];
-//     if (randomNum < move.usageOdds) {
-//       return moveName;
-//     }
-//     randomNum -= move.usageOdds;
-//   }
-// }
+  for (let moveName in stats) {
+    const move = stats[moveName];
+    if (randomNum < move.usageOdds) {
+      return moveName;
+    }
+    randomNum -= move.usageOdds;
+  }
+}
 
 
 // console.log(weightedRandomSelection(stats));
