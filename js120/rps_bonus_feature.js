@@ -150,7 +150,7 @@ function createComputer() {
 function createHuman() {
   //note: "this" keyword refers to playerObject
   let playerObject = createPlayer();
-  const ABBRI_MAX_LENGTH = 2;
+  const ABBRI_MAX_LENGTH = 2; // ex: 'r', 'p', 'sc','sp'
   let humanObject = {
     choose() {
       let choice;
