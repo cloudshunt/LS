@@ -190,11 +190,11 @@ function displayScores(humanScore, computerScore) {
 
 function gameWinCheck (choice, otherChoice) {
   const WINNING_COMBOS = {
-    rock:     ['scissors', 'lizard', 'sc', 'l'],   r: ['scissors', 'lizard', 'sc', 'l'],
-    paper:    ['rock',     'spock', 'r', 'sp'],    p: ['rock',     'spock', 'r', 'sp'],
-    scissors: ['paper',    'lizard', 'p', 'l'],    sc:['paper',    'lizard', 'p', 'l'],
-    lizard:   ['paper',    'spock', 'p', 'sp'],    l: ['paper',    'spock', 'p', 'sp'],
-    spock:    ['rock',     'scissors', 'r', 'sc'], sp:['rock',     'scissors', 'r', 'sc'],
+    rock:     ['scissors', 'lizard', 'sc', 'l'],   r: this.rock,
+    paper:    ['rock',     'spock', 'r', 'sp'],    p: this.paper,
+    scissors: ['paper',    'lizard', 'p', 'l'],    sc:this.scissors,
+    lizard:   ['paper',    'spock', 'p', 'sp'],    l: this.lizard,
+    spock:    ['rock',     'scissors', 'r', 'sc'], sp: this.spock,
   };
 
   return WINNING_COMBOS[choice].includes(otherChoice);
@@ -232,6 +232,7 @@ function checkAndDisplayRoundWinnerFunc() {
 
 function displayWelcomeMessage() {
   console.log(`Welcome to rock, paper, scissors, spock and lizard!`);
+  console.log(`Win ${this.GRAND_WIN_SCORE} points first to become the GRAND WINNER !!!`);
 }
 
 function displayGoodbyeMessage() {
@@ -243,13 +244,11 @@ function grandWinnerAnnounce(player) {
 }
 
 function checkDisplayUpdateGrandWinnerFunc() {
-  const GRAND_WIN_SCORE = 5;
-
-  if (this.human.score.getScore() === GRAND_WIN_SCORE) {
+  if (this.human.score.getScore() === this.GRAND_WIN_SCORE) {
     let player = 'Human';
     grandWinnerAnnounce(player);
     this.grandWinner = true;
-  } else if (this.computer.score.getScore() === GRAND_WIN_SCORE) {
+  } else if (this.computer.score.getScore() === this.GRAND_WIN_SCORE) {
     let player = 'Computer';
     grandWinnerAnnounce(player);
     this.grandWinner = true;
@@ -258,20 +257,21 @@ function checkDisplayUpdateGrandWinnerFunc() {
 
 function playAgainFunc () {
   console.log('Play again? (y/n)');
-  let answer = READLINE.question();
+  let answer = READLINE.question().toLowerCase();
 
-  while (answer !== 'y' && answer !== 'n') {
+  while ( (answer !== 'y' && answer !== 'n' && answer !== 'yes' && answer !== 'no') ) {
     console.log("invalid entry, try again.");
-    answer = READLINE.question();
+    answer = READLINE.question().toLowerCase();
   }
 
-  return answer.toLowerCase() === 'y';
+  return (answer === 'y') || ( answer === 'yes');
 }
 
 const RPSGame = {
   human: createHuman(),
   computer: createComputer(),
   grandWinner: false,
+  GRAND_WIN_SCORE: 5,
 
   checkAndDisplayRoundWinner: checkAndDisplayRoundWinnerFunc,
   displayWelcome: displayWelcomeMessage,
