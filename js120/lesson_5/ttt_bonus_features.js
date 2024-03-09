@@ -39,7 +39,7 @@ class Board {
   }
 
   displayWithClear() {
-    console.clear(); //uncomment when done debug
+    console.clear();
     console.log("");
     console.log("");
     this.display();
@@ -82,7 +82,6 @@ class Board {
 class Player {
   constructor(marker) {
     const INITIAL_SCORE = 0;
-    // maybe a "marker" to keep track of this player's symbol (i.e., 'X' or 'O')
     this.marker = marker;
     this.score = INITIAL_SCORE;
   }
@@ -114,7 +113,6 @@ class Computer extends Player {
 
 class TTTGame {
   constructor() {
-    // Need a board and two players
     this.board = new Board();
     this.human = new Human();
     this.computer = new Computer();
@@ -135,7 +133,7 @@ class TTTGame {
   ];
 
   static joinOr = function(arr,  separator = ', ', conjunction = 'or') {
-    conjunction = ' ' + conjunction + ' '; //adding space befor and after
+    conjunction = ' ' + conjunction + ' '; //adding space before and after
     let resultStr = '';
 
     for (let idx = 0; idx < arr.length; idx++) {
@@ -179,14 +177,12 @@ class TTTGame {
   }
 
   displayWelcomeMessage() {
-    //STUB
     console.clear();
     console.log("Welcome to Tic Tac Toe!");
     console.log("");
   }
 
   displayGoodbyeMessage() {
-    //STUB
     console.log("Thanks for playing Tic Tac Toe! Goodbye!");
   }
 
@@ -218,7 +214,7 @@ class TTTGame {
   }
 
 
-  humanMoves() { // was firstPlayerMoves
+  humanMoves() {
     let choice;
 
     while (true) {
@@ -240,6 +236,7 @@ class TTTGame {
     let choice = this.computerOffensiveMove() || this.computerDefensiveMove() ||
                  this.getMidSquare()  || this.getRandomSquare();
 
+    // mark selected square with computer marker
     this.board.markSquareAt(choice, this.computer.getMarker());
   }
 
@@ -353,7 +350,6 @@ class TTTGame {
 
       console.log('Invalid entry, please try again.');
     }
-    //sets this.firstPlayer = this.human OR this.computer
   }
 
   playRounds() {
@@ -362,7 +358,7 @@ class TTTGame {
     while (true) {
       this.board.displayWithClear();
       this.gamePlayLogic();
-      this.board.displayWithClear(); //show graphic result
+      this.board.displayWithClear();
       this.incrementWinnerScore();
 
       this.displayResults(); //announce winner
