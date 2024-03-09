@@ -6,7 +6,6 @@ class Square {
   static COMPUTER_MARKER = "O";
 
   constructor(marker = Square.UNUSED_SQUARE) {
-    // We need some way to keep track of this square's marker.
     this.marker = marker;
   }
 
@@ -40,7 +39,7 @@ class Board {
   }
 
   displayWithClear() {
-    //console.clear(); //uncomment when done debug
+    console.clear(); //uncomment when done debug
     console.log("");
     console.log("");
     this.display();
