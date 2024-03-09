@@ -369,9 +369,9 @@ class TTTGame {
         break;
       }
 
-      let anotherRound = TTTGame.playAnotherRound(); //ask if looking to play another round.
-      if (anotherRound === 'n') break; //If no, break out of loop
-      else this.board.reset(); // if yes,  re-initialize the board
+      let anotherRound = TTTGame.playAnotherRound();
+      if (anotherRound === 'n') break;
+      else this.board.reset();
     }
   }
 
