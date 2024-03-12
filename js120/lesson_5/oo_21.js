@@ -1,6 +1,9 @@
 const readline = require('readline-sync');
 
 class Card {
+  static SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
+  static VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace'];
+
   constructor(cardSuit, cardValue) {
     this.cardSuit = cardSuit;
     this.cardValue = cardValue;
@@ -22,9 +25,6 @@ class Deck {
     this.shuffleDeck();
   }
 
-  static SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
-  static VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace'];
-
   shuffleDeck() {
     for (let idx = this.deckArr.length - 1; idx > 0; idx--) {
       let otherIdx = Math.floor(Math.random() * (idx + 1)); // 0 to index
@@ -37,8 +37,8 @@ class Deck {
   }
 
   initializeDeck() {
-    Deck.SUITS.forEach((cardSuit) => {
-      Deck.VALUES.forEach((cardValue => {
+    Card.SUITS.forEach((cardSuit) => {
+      Card.VALUES.forEach((cardValue => {
         this.deckArr.push(new Card( cardSuit, cardValue));
       }));
     });
@@ -103,15 +103,15 @@ class Participant {
 }
 
 class TwentyOneGame {
+  static WINNING_POINTS = 21;
+  static WIN_DOLLAR_AMT = 10;
+  static LOSE_DOLLAR_AMT = 0;
+
   constructor() {
     this.deck = new Deck();
     this.player = new Participant('player');
     this.dealer = new Participant('dealer');
   }
-
-  static WINNING_POINTS = 21;
-  static WIN_DOLLAR_AMT = 10; //change to 10 if win grandly
-  static LOSE_DOLLAR_AMT = 0;
 
   start() {
     this.displayWelcomeMessage();
