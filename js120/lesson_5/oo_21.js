@@ -81,6 +81,7 @@ class Participant {
 
 
   isBusted() {
+    // eslint-disable-next-line no-use-before-define
     return this.points > TwentyOneGame.WINNING_POINTS;
   }
 
