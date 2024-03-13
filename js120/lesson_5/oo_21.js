@@ -1,6 +1,7 @@
 const readline = require('readline-sync');
 
 class Card {
+  static SUIT_ICON = {Hearts:'\u2665', Diamonds:'\u2666', Clubs:'\u2663', Spades:'\u2660'};
   static SUITS = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
   static VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'Jack', 'Queen', 'King', 'Ace'];
 
@@ -52,11 +53,12 @@ class Deck {
 }
 
 class Participant {
+  static INITIAL_DOLLAR = 5;
+
   constructor(identity) {
-    const INITIAL_DOLLAR = 5;
     this.identity = identity;
     this.initializePointsAndHand();
-    this.money = INITIAL_DOLLAR; //even though dealer will have this, but wont be used
+    this.money = Participant.INITIAL_DOLLAR; //even though dealer will have this, but wont be used
   }
 
   initializePointsAndHand() {
@@ -107,6 +109,7 @@ class TwentyOneGame {
   static WINNING_POINTS = 21;
   static WIN_DOLLAR_AMT = 10;
   static LOSE_DOLLAR_AMT = 0;
+  static DEALER_MIN_REQUIRED_POINTS = 17;
 
   constructor() {
     this.deck = new Deck();
@@ -115,25 +118,36 @@ class TwentyOneGame {
   }
 
   start() {
+    console.clear();
     this.displayWelcomeMessage();
     while (true) {
       this.roundOfGame();
       this.player.displayPlayerDollar();
-      if (this.player.getDollar() === TwentyOneGame.WIN_DOLLAR_AMT) {
-        console.log('You are broke now, dirt for dinner !!');
+
+      if (this.gameOver()) {
+        this.gameOverMessage();
         break;
-      } else if (this.player.getDollar() === TwentyOneGame.LOSE_DOLLAR_AMT) {
-        console.log('You are rich now, chicken dinner !!');
-        break;
-      } else {
-        let anotherRound = this.anotherRoundCheck();
-        this.initializeRound();
-        if (anotherRound) continue;
-        else break;
       }
+
+      let anotherRound = this.anotherRoundCheck();
+      if (anotherRound) this.initializeRound();
+      else break;
 
     }
     this.displayGoodbyeMessage();
+  }
+
+  gameOver() {
+    return this.player.getDollar() === TwentyOneGame.WIN_DOLLAR_AMT ||
+           this.player.getDollar() === TwentyOneGame.LOSE_DOLLAR_AMT;
+  }
+
+  gameOverMessage() {
+    if (this.player.getDollar() === TwentyOneGame.WIN_DOLLAR_AMT) {
+      console.log('You are rich now, chicken dinner !!');
+    } else if (this.player.getDollar() === TwentyOneGame.LOSE_DOLLAR_AMT) {
+      console.log('You are broke now, dirt for dinner !!');
+    }
   }
 
   initializeRound() {
@@ -247,9 +261,8 @@ class TwentyOneGame {
   }
 
   getParticipantCardDisplay(participant) {
-    const SUIT_ICON = {Hearts:'\u2665', Diamonds:'\u2666', Clubs:'\u2663', Spades:'\u2660'};
     let handSuitAndValue = participant.getHand().map( (card) => {
-      return SUIT_ICON[ card.getSuit() ] + String(card.getValue());
+      return Card.SUIT_ICON[ card.getSuit() ] + String(card.getValue());
     });
 
     return handSuitAndValue;
@@ -302,14 +315,14 @@ class TwentyOneGame {
   }
 
   dealerTurn() {
-    const DEALER_MIN_REQUIRED_POINTS = 17;
     while (true) {
-      if ( this.dealer.points < DEALER_MIN_REQUIRED_POINTS) {
+      if ( this.dealer.points < TwentyOneGame.DEALER_MIN_REQUIRED_POINTS) {
         this.hitLogic(this.dealer);
         console.log('Dealer hits');
         this.displayCardsDealerReveal();
         if (this.dealer.isBusted()) break;
-      } else if (this.dealer.points >= DEALER_MIN_REQUIRED_POINTS) {
+      } else if (this.dealer.points >=
+                  TwentyOneGame.DEALER_MIN_REQUIRED_POINTS) {
         console.log('Dealer stays');
         this.displayCardsDealerReveal();
         break;
